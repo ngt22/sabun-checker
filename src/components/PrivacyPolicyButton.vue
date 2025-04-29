@@ -1,3 +1,63 @@
+<script setup lang="ts">
+import { ref, watch, onUnmounted } from "vue";
+
+// 表示するダイアログの種類を定義
+type DialogType = "policy" | "terms";
+
+// --- Props ---
+interface Props {
+  policyLinkText?: string; // プライバシーポリシー用リンクのテキスト
+  termsLinkText?: string; // 免責事項用リンクのテキスト
+}
+// Propsのデフォルト値を設定
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = withDefaults(defineProps<Props>(), {
+  policyLinkText: "プライバシーポリシー",
+  termsLinkText: "免責事項",
+});
+
+// --- State ---
+// 現在表示しているダイアログの種類を管理 ('policy', 'terms', または null=非表示)
+const visibleDialog = ref<DialogType | null>(null);
+
+// --- Methods ---
+/**
+ * 指定された種類のダイアログを開く
+ * @param type 表示するダイアログの種類 ('policy' または 'terms')
+ */
+const openDialog = (type: DialogType): void => {
+  visibleDialog.value = type;
+};
+
+/**
+ * 表示中のダイアログを閉じる
+ */
+const closeDialog = (): void => {
+  visibleDialog.value = null;
+};
+
+// --- Watchers & Lifecycle Hooks ---
+// ダイアログの表示状態（visibleDialogの値）を監視し、bodyのスクロールを制御
+watch(visibleDialog, (newValue) => {
+  if (typeof document !== "undefined") {
+    if (newValue !== null) {
+      // いずれかのダイアログが表示された場合
+      document.body.style.overflow = "hidden"; // 背景スクロール禁止
+    } else {
+      // 全てのダイアログが閉じられた場合
+      document.body.style.removeProperty("overflow"); // 背景スクロール禁止を解除
+    }
+  }
+});
+
+// コンポーネントがアンマウントされる際に、もしダイアログが開いていたらスクロール禁止を解除
+onUnmounted(() => {
+  if (typeof document !== "undefined" && visibleDialog.value !== null) {
+    document.body.style.removeProperty("overflow");
+  }
+});
+</script>
+
 <template>
   <div class="policy-links-container">
     <a href="#" @click.prevent="openDialog('policy')" class="policy-link">
@@ -192,65 +252,6 @@
     </teleport>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, watch, onUnmounted } from "vue";
-
-// 表示するダイアログの種類を定義
-type DialogType = "policy" | "terms";
-
-// --- Props ---
-interface Props {
-  policyLinkText?: string; // プライバシーポリシー用リンクのテキスト
-  termsLinkText?: string; // 免責事項用リンクのテキスト
-}
-// Propsのデフォルト値を設定
-const props = withDefaults(defineProps<Props>(), {
-  policyLinkText: "プライバシーポリシー",
-  termsLinkText: "免責事項",
-});
-
-// --- State ---
-// 現在表示しているダイアログの種類を管理 ('policy', 'terms', または null=非表示)
-const visibleDialog = ref<DialogType | null>(null);
-
-// --- Methods ---
-/**
- * 指定された種類のダイアログを開く
- * @param type 表示するダイアログの種類 ('policy' または 'terms')
- */
-const openDialog = (type: DialogType): void => {
-  visibleDialog.value = type;
-};
-
-/**
- * 表示中のダイアログを閉じる
- */
-const closeDialog = (): void => {
-  visibleDialog.value = null;
-};
-
-// --- Watchers & Lifecycle Hooks ---
-// ダイアログの表示状態（visibleDialogの値）を監視し、bodyのスクロールを制御
-watch(visibleDialog, (newValue) => {
-  if (typeof document !== "undefined") {
-    if (newValue !== null) {
-      // いずれかのダイアログが表示された場合
-      document.body.style.overflow = "hidden"; // 背景スクロール禁止
-    } else {
-      // 全てのダイアログが閉じられた場合
-      document.body.style.removeProperty("overflow"); // 背景スクロール禁止を解除
-    }
-  }
-});
-
-// コンポーネントがアンマウントされる際に、もしダイアログが開いていたらスクロール禁止を解除
-onUnmounted(() => {
-  if (typeof document !== "undefined" && visibleDialog.value !== null) {
-    document.body.style.removeProperty("overflow");
-  }
-});
-</script>
 
 <style scoped>
 /* --- リンク表示エリアのスタイル --- */
