@@ -1,5 +1,10 @@
-# Vue 3 + TypeScript + Vite
-
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+# テキスト差分チェッカー
+二つのテキストを比較して差分（追加・削除）を分かりやすく表示するシンプルなウェブアプリケーションです。
+## 主な機能:
+* Vue 3.5, PrimeVue
+* テキスト比較と差分ハイライト (LCSアルゴリズム)
+* モバイル対応レスポンシブデザイン
+* PWA対応 (インストール可能, オフライン動作)
+* 設定オプション (例: 半角文字のハイライト)
+## 使用方法
+ [テキスト差分チェッカーβ](https://ngt22.github.io/sabun-checker/).
