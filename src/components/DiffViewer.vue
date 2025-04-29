@@ -26,7 +26,7 @@ const diffResult = computed(() => {
     return diffChars(t1, t2);
 });
 
-const hankakuRegex = /[\u0020-\u007E]/g; // 半角スペースと半角記号
+// const hankakuRegex = /[\u0020-\u007E]/g; // 半角スペースと半角記号
 
 //ハイライトのCSS クラスを返す
 const getChangeClass = (change: Change): string[] => {
@@ -71,7 +71,7 @@ const highlightCharacters = (text: string): string => {
     <Card class="diff-viewer-card">
         <template #title>差分結果</template>
         <template #content>
-            <pre v-if="diffResult.length > 0"><template v-for="(part, index) in diffResult" :key="index"><span :class="getChangeClass(part)" v-html="highlightCharacters(part.value)"></span></template>
+            <pre v-if="diffResult.length > 0"><template v-for="(part, _index) in diffResult" :key="_index"><span :class="getChangeClass(part)" v-html="highlightCharacters(part.value)"></span></template>
 </pre>
             <p v-else>テキストを入力して比較してください。</p>
         </template>
