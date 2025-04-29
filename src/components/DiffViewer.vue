@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { diffChars, type Change } from 'diff';
 import Card from 'primevue/card';
 
-interface Config {
+interface Settings {
     highlightFullWidthSpace: boolean;
     highlightHalfWidthSpace: boolean;
     highlightHalfWidthSymbol: boolean;
@@ -14,7 +14,7 @@ interface Config {
 interface Props {
     text1: string;
     text2: string;
-    config: Config;
+    settings: Settings;
 }
 
 const props = defineProps<Props>();
@@ -51,11 +51,11 @@ const highlightCharacters = (text: string): string => {
 
     // ハイライト対象の正規表現パターンを配列に格納
     const patterns: string[] = [];
-    if (props.config.highlightFullWidthSpace) patterns.push("\\u3000"); // 全角スペース
-    if (props.config.highlightHalfWidthSpace) patterns.push(" "); // 半角スペース
-    if (props.config.highlightHalfWidthSymbol) patterns.push('[!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~]');
-    if (props.config.highlightHalfWidthAlpha) patterns.push("[a-zA-Z]"); // 半角英字
-    if (props.config.highlightHalfWidthDigit) patterns.push("[0-9]"); // 半角数字
+    if (props.settings.highlightFullWidthSpace) patterns.push("\\u3000"); // 全角スペース
+    if (props.settings.highlightHalfWidthSpace) patterns.push(" "); // 半角スペース
+    if (props.settings.highlightHalfWidthSymbol) patterns.push('[!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~]');
+    if (props.settings.highlightHalfWidthAlpha) patterns.push("[a-zA-Z]"); // 半角英字
+    if (props.settings.highlightHalfWidthDigit) patterns.push("[0-9]"); // 半角数字
 
     if (patterns.length > 0) {
         const combinedRegex = new RegExp(`(${patterns.join('|')})`, 'g');

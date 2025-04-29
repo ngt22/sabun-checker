@@ -4,7 +4,7 @@ import TheHeader from './components/TheHeader.vue';
 import TextInputArea from './components/TextInputArea.vue';
 import DiffViewer from './components/DiffViewer.vue';
 import AboutDialog from './components/AboutDialog.vue';
-import ConfigDialog from './components/ConfigDialog.vue';
+import SettingDialog from './components/SettingDialog.vue';
 
 //title
 const appTitle = __APP_NAME__;
@@ -32,10 +32,10 @@ const text2 = ref('');
 
 // ポップアップ表示状態
 const showAboutDialog = ref(false);
-const showConfigDialog = ref(false);
+const showSettingDialog = ref(false);
 
 // 設定の状態
-const config = ref({
+const settings = ref({
   highlightFullWidthSpace: false, // 全角スペース
   highlightHalfWidthSpace: false, // 半角スペース
   highlightHalfWidthSymbol: false, // 半角記号
@@ -44,9 +44,9 @@ const config = ref({
 });
 const HIGHLIGHT_CONFIG_KEY = 'highlightConfig';
 
-watch(config, (newConfigValue) => {
-  console.log('Highlight config changed, saving:', newConfigValue);
-  localStorage.setItem(HIGHLIGHT_CONFIG_KEY, JSON.stringify(newConfigValue));
+watch(settings, (newSettingValue) => {
+  console.log('Highlight settings changed, saving:', newSettingValue);
+  localStorage.setItem(HIGHLIGHT_CONFIG_KEY, JSON.stringify(newSettingValue));
 }, { deep: true });
 
 onMounted(() => {
@@ -74,41 +74,41 @@ onMounted(() => {
   }
 
   //highlight
-  const storedHighlightConfig = localStorage.getItem(HIGHLIGHT_CONFIG_KEY);
-  if (storedHighlightConfig) {
+  const storedHighlightSettings = localStorage.getItem(HIGHLIGHT_CONFIG_KEY);
+  if (storedHighlightSettings) {
     try {
-      const loadedConfig = JSON.parse(storedHighlightConfig);
-      config.value = { ...config.value, ...loadedConfig };
-      console.log('Loaded highlight config from localStorage:', config.value);
+      const loadedSettings = JSON.parse(storedHighlightSettings);
+    settings.value = { ...settings.value, ...loadedSettings };
+      console.log('Loaded highlight settings from localStorage:', settings.value);
     } catch (e) {
-      console.error('Failed to parse highlight config from localStorage:', e);
+      console.error('Failed to parse highlight settings from localStorage:', e);
       localStorage.removeItem(HIGHLIGHT_CONFIG_KEY);
     }
   } else {
-    console.log('No highlight config found in localStorage, using default values.');
+    console.log('No highlight setting found in localStorage, using default values.');
   }
 });
 
 const openAbout = () => {
   showAboutDialog.value = true;
 };
-const openConfig = () => {
-  showConfigDialog.value = true;
+const openSettings = () => {
+  showSettingDialog.value = true;
 };
 
 </script>
 
 <template>
   <div class="app-container">
-    <TheHeader @open-about="openAbout" @open-config="openConfig" />
+    <TheHeader @open-about="openAbout" @open-settings="openSettings" />
 
     <main class="main-content">
       <TextInputArea v-model:text1="text1" v-model:text2="text2" />
-      <DiffViewer :text1="text1" :text2="text2" :config="config" />
+      <DiffViewer :text1="text1" :text2="text2" :settings="settings" />
     </main>
 
     <AboutDialog v-model:visible="showAboutDialog" />
-    <ConfigDialog v-model:visible="showConfigDialog" v-model:config="config" v-model:isDarkMode="isDarkMode" />
+    <SettingDialog v-model:visible="showSettingDialog" v-model:settings="settings" v-model:isDarkMode="isDarkMode" />
   </div>
 </template>
 

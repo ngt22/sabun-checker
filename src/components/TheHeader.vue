@@ -4,17 +4,17 @@ import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
 import Menu from 'primevue/menu';
 
-const emit = defineEmits(['open-about', 'open-config']);
+const emit = defineEmits(['open-about', 'open-settings']);
 
 const appName = __APP_NAME__
 
 const menu = ref();
 const items = ref([
     {
-        label: 'Config',
+        label: 'Settings',
         icon: 'pi pi-cog',
         command: () => {
-            emit('open-config');
+            emit('open-settings');
         }
     },
     {
@@ -36,7 +36,7 @@ const toggleMenu = (event: Event) => {
         <template #start>
             <div class="flex align-items-center gap-2">
                 <i class="pi pi-search" style="font-size: 1.5rem; color: var(--p-primary-color);"></i>
-                <h1 class="app-title inline text-xl font-semibold">テキスト差分チェッカーβ</h1>
+                <h1 class="app-title inline text-xl font-semibold">{{ appName }}</h1>
             </div>
         </template>
 
