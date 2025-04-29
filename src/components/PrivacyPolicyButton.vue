@@ -11,7 +11,7 @@ interface Props {
 }
 // Propsのデフォルト値を設定
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   policyLinkText: "プライバシーポリシー",
   termsLinkText: "免責事項",
 });
