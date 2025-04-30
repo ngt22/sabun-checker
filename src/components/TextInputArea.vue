@@ -2,7 +2,7 @@
 import { computed } from "vue"
 import Textarea from "primevue/textarea"
 import Button from "primevue/button"
-import Tooltip from "primevue/tooltip"
+//import Tooltip from "primevue/tooltip"
 
 const text1 = defineModel<string>("text1", { default: "" })
 const text2 = defineModel<string>("text2", { default: "" })
