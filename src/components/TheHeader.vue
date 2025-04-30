@@ -1,55 +1,64 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import Button from 'primevue/button';
-import Toolbar from 'primevue/toolbar';
-import Menu from 'primevue/menu';
+import { ref } from "vue"
+import Button from "primevue/button"
+import Toolbar from "primevue/toolbar"
+import Menu from "primevue/menu"
 
-const emit = defineEmits(['open-about', 'open-settings']);
+const emit = defineEmits(["open-about", "open-settings"])
 
 const appName = __APP_NAME__
 
-const menu = ref();
+const menu = ref()
 const items = ref([
-    {
-        label: 'Settings',
-        icon: 'pi pi-cog',
-        command: () => {
-            emit('open-settings');
-        }
+  {
+    label: "Settings",
+    icon: "pi pi-cog",
+    command: () => {
+      emit("open-settings")
     },
-    {
-        label: 'About',
-        icon: 'pi pi-info-circle',
-        command: () => {
-            emit('open-about');
-        }
+  },
+  {
+    label: "About",
+    icon: "pi pi-info-circle",
+    command: () => {
+      emit("open-about")
     },
-]);
+  },
+])
 
 const toggleMenu = (event: Event) => {
-    menu.value.toggle(event);
-};
+  menu.value.toggle(event)
+}
 </script>
 
 <template>
-    <Toolbar>
-        <template #start>
-            <div class="flex align-items-center gap-2">
-                <i class="pi pi-search" style="font-size: 1.5rem; color: var(--p-primary-color);"></i>
-                <h1 class="app-title inline text-xl font-semibold">{{ appName }}</h1>
-            </div>
-        </template>
+  <Toolbar>
+    <template #start>
+      <div class="flex align-items-center gap-2">
+        <i
+          class="pi pi-search"
+          style="font-size: 1.5rem; color: var(--p-primary-color)"
+        ></i>
+        <h1 class="app-title inline text-xl font-semibold">{{ appName }}</h1>
+      </div>
+    </template>
 
-        <template #end>
-            <Button icon="pi pi-bars" text rounded aria-label="Menu" @click="toggleMenu" />
-            <Menu ref="menu" :model="items" :popup="true" />
-        </template>
-    </Toolbar>
+    <template #end>
+      <Button
+        icon="pi pi-bars"
+        text
+        rounded
+        aria-label="Menu"
+        @click="toggleMenu"
+      />
+      <Menu ref="menu" :model="items" :popup="true" />
+    </template>
+  </Toolbar>
 </template>
 
 <style scoped>
 h1 {
-    font-size: 1.5rem;
-    margin: 0;
+  font-size: 1.5rem;
+  margin: 0;
 }
 </style>

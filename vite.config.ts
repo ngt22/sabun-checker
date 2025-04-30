@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const appName = "テキスト差分チェッカーβ"
-const appVersion = "0.1.0"
+const appVersion = "0.1.1"
 
 // https://vite.dev/config/
 export default defineConfig({

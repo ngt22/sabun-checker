@@ -1,39 +1,46 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
-import TheHeader from "./components/TheHeader.vue";
-import TextInputArea from "./components/TextInputArea.vue";
-import DiffViewer from "./components/DiffViewer.vue";
-import AboutDialog from "./components/AboutDialog.vue";
-import SettingDialog from "./components/SettingDialog.vue";
-import PrivacyPolicyButton from "./components/PrivacyPolicyButton.vue";
+import { ref, watch, onMounted } from "vue"
+import TheHeader from "./components/TheHeader.vue"
+import TextInputArea from "./components/TextInputArea.vue"
+import DiffViewer from "./components/DiffViewer.vue"
+import AboutDialog from "./components/AboutDialog.vue"
+import SettingDialog from "./components/SettingDialog.vue"
+import PrivacyPolicyButton from "./components/PrivacyPolicyButton.vue"
 
 //title
-const appTitle = __APP_NAME__;
+const appTitle = __APP_NAME__
 
 // テーマ切り替え
-const isDarkMode = ref(false);
-const themeClass = "dark-theme";
+const isDarkMode = ref(false)
+const themeClass = "dark-theme"
 
 watch(isDarkMode, (newValue) => {
-  const root = document.documentElement;
+  const root = document.documentElement
   if (newValue) {
-    root.classList.add(themeClass);
-    console.log("Added .dark-thme class");
+    root.classList.add(themeClass)
+    console.log("Added .dark-thme class")
   } else {
-    root.classList.remove(themeClass);
-    console.log("Removed .dark-theme class");
+    root.classList.remove(themeClass)
+    console.log("Removed .dark-theme class")
   }
 
-  localStorage.setItem("darkMode", JSON.stringify(newValue));
-});
+  localStorage.setItem("darkMode", JSON.stringify(newValue))
+})
 
 // 入力テキストの状態
-const text1 = ref("");
-const text2 = ref("");
+const text1 = ref("")
+const text2 = ref("")
+
+const swapTexts = () => {
+  const temp = text1.value
+  text1.value = text2.value
+  text2.value = temp
+  console.log("Texts swapped")
+}
 
 // ポップアップ表示状態
-const showAboutDialog = ref(false);
-const showSettingDialog = ref(false);
+const showAboutDialog = ref(false)
+const showSettingDialog = ref(false)
 
 // 設定の状態
 const settings = ref({
@@ -42,72 +49,72 @@ const settings = ref({
   highlightHalfWidthSymbol: false, // 半角記号
   highlightHalfWidthAlpha: false, // 半角英字
   highlightHalfWidthDigit: false, // 半角数字
-});
-const HIGHLIGHT_CONFIG_KEY = "highlightConfig";
+})
+const HIGHLIGHT_CONFIG_KEY = "highlightConfig"
 
 watch(
   settings,
   (newSettingValue) => {
-    console.log("Highlight settings changed, saving:", newSettingValue);
-    localStorage.setItem(HIGHLIGHT_CONFIG_KEY, JSON.stringify(newSettingValue));
+    console.log("Highlight settings changed, saving:", newSettingValue)
+    localStorage.setItem(HIGHLIGHT_CONFIG_KEY, JSON.stringify(newSettingValue))
   },
   { deep: true }
-);
+)
 
 onMounted(() => {
   //title
-  document.title = appTitle;
-  console.log(`Document title set to: ${appTitle}`);
+  document.title = appTitle
+  console.log(`Document title set to: ${appTitle}`)
 
   //theme
-  const root = document.documentElement;
-  const storeDarkMode = localStorage.getItem("darkMode");
-  let darkModePreference = false;
+  const root = document.documentElement
+  const storeDarkMode = localStorage.getItem("darkMode")
+  let darkModePreference = false
 
   if (storeDarkMode !== null) {
-    darkModePreference = JSON.parse(storeDarkMode);
+    darkModePreference = JSON.parse(storeDarkMode)
   } else {
     darkModePreference =
-      window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ?? false;
+      window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ?? false
   }
 
-  isDarkMode.value = darkModePreference;
+  isDarkMode.value = darkModePreference
 
   if (darkModePreference) {
-    root.classList.add(themeClass);
-    console.log("Applied initial .dark-theme class");
+    root.classList.add(themeClass)
+    console.log("Applied initial .dark-theme class")
   } else {
-    root.classList.remove(themeClass);
-    console.log("Initial theme: light");
+    root.classList.remove(themeClass)
+    console.log("Initial theme: light")
   }
 
   //highlight
-  const storedHighlightSettings = localStorage.getItem(HIGHLIGHT_CONFIG_KEY);
+  const storedHighlightSettings = localStorage.getItem(HIGHLIGHT_CONFIG_KEY)
   if (storedHighlightSettings) {
     try {
-      const loadedSettings = JSON.parse(storedHighlightSettings);
-      settings.value = { ...settings.value, ...loadedSettings };
+      const loadedSettings = JSON.parse(storedHighlightSettings)
+      settings.value = { ...settings.value, ...loadedSettings }
       console.log(
         "Loaded highlight settings from localStorage:",
         settings.value
-      );
+      )
     } catch (e) {
-      console.error("Failed to parse highlight settings from localStorage:", e);
-      localStorage.removeItem(HIGHLIGHT_CONFIG_KEY);
+      console.error("Failed to parse highlight settings from localStorage:", e)
+      localStorage.removeItem(HIGHLIGHT_CONFIG_KEY)
     }
   } else {
     console.log(
       "No highlight setting found in localStorage, using default values."
-    );
+    )
   }
-});
-
+})
+//ダイアログ
 const openAbout = () => {
-  showAboutDialog.value = true;
-};
+  showAboutDialog.value = true
+}
 const openSettings = () => {
-  showSettingDialog.value = true;
-};
+  showSettingDialog.value = true
+}
 </script>
 
 <template>
@@ -115,7 +122,11 @@ const openSettings = () => {
     <TheHeader @open-about="openAbout" @open-settings="openSettings" />
 
     <main class="main-content">
-      <TextInputArea v-model:text1="text1" v-model:text2="text2" />
+      <TextInputArea
+        v-model:text1="text1"
+        v-model:text2="text2"
+        @swap-texts="swapTexts"
+      />
       <DiffViewer :text1="text1" :text2="text2" :settings="settings" />
     </main>
 

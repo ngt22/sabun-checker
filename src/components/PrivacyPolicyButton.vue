@@ -1,61 +1,50 @@
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from "vue";
+import { ref, watch, onUnmounted } from "vue"
 
-// 表示するダイアログの種類を定義
-type DialogType = "policy" | "terms";
+type DialogType = "policy" | "terms"
 
-// --- Props ---
 interface Props {
-  policyLinkText?: string; // プライバシーポリシー用リンクのテキスト
-  termsLinkText?: string; // 免責事項用リンクのテキスト
+  policyLinkText?: string
+  termsLinkText?: string
 }
-// Propsのデフォルト値を設定
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 withDefaults(defineProps<Props>(), {
   policyLinkText: "プライバシーポリシー",
   termsLinkText: "免責事項",
-});
+})
 
-// --- State ---
-// 現在表示しているダイアログの種類を管理 ('policy', 'terms', または null=非表示)
-const visibleDialog = ref<DialogType | null>(null);
+const visibleDialog = ref<DialogType | null>(null)
 
-// --- Methods ---
 /**
  * 指定された種類のダイアログを開く
  * @param type 表示するダイアログの種類 ('policy' または 'terms')
  */
 const openDialog = (type: DialogType): void => {
-  visibleDialog.value = type;
-};
+  visibleDialog.value = type
+}
 
 /**
  * 表示中のダイアログを閉じる
  */
 const closeDialog = (): void => {
-  visibleDialog.value = null;
-};
+  visibleDialog.value = null
+}
 
-// --- Watchers & Lifecycle Hooks ---
-// ダイアログの表示状態（visibleDialogの値）を監視し、bodyのスクロールを制御
 watch(visibleDialog, (newValue) => {
   if (typeof document !== "undefined") {
     if (newValue !== null) {
-      // いずれかのダイアログが表示された場合
-      document.body.style.overflow = "hidden"; // 背景スクロール禁止
+      document.body.style.overflow = "hidden"
     } else {
-      // 全てのダイアログが閉じられた場合
-      document.body.style.removeProperty("overflow"); // 背景スクロール禁止を解除
+      document.body.style.removeProperty("overflow")
     }
   }
-});
+})
 
-// コンポーネントがアンマウントされる際に、もしダイアログが開いていたらスクロール禁止を解除
 onUnmounted(() => {
   if (typeof document !== "undefined" && visibleDialog.value !== null) {
-    document.body.style.removeProperty("overflow");
+    document.body.style.removeProperty("overflow")
   }
-});
+})
 </script>
 
 <template>
@@ -254,33 +243,29 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* --- リンク表示エリアのスタイル --- */
 .policy-links-container {
-  display: inline-flex; /* インライン要素として横並び */
-  flex-wrap: wrap; /* 必要に応じて折り返す */
-  gap: 15px; /* リンク間の横方向のスペース */
-  align-items: center; /* 縦方向の中央揃え（複数行になった場合） */
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
 }
 
-/* --- リンクのスタイル --- */
 .policy-link {
-  font-size: 0.9rem; /* 文字サイズ */
-  color: #007bff; /* リンクの色 (例: Bootstrapのリンク色) */
-  text-decoration: underline; /* 下線 */
-  background: none; /* 背景なし */
-  border: none; /* ボーダーなし */
-  padding: 0; /* パディングなし */
-  cursor: pointer; /* カーソルをポインターに */
-  transition: color 0.2s ease; /* 色の変化を滑らかに */
+  font-size: 0.9rem;
+  color: #777777;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 .policy-link:hover,
 .policy-link:focus {
-  /* ホバー時とフォーカス時 */
-  color: #0056b3; /* 少し濃い色に */
-  text-decoration: none; /* ホバー時は下線を消す（お好みで） */
+  color: #0056b3;
+  text-decoration: none;
 }
 
-/* --- ダイアログ関連のスタイル（変更なし・共通部分） --- */
 .dialog-overlay {
   position: fixed;
   inset: 0;
@@ -321,7 +306,6 @@ onUnmounted(() => {
   color: #555;
 }
 
-/* ダイアログタイトル (h2) の共通スタイル */
 h2 {
   margin-top: 0;
   margin-bottom: 25px;
@@ -338,8 +322,6 @@ h2 {
   padding-left: 5px;
 }
 
-/* --- ダイアログ内のコンテンツスタイル（変更なし・共通部分） --- */
-/* ダイアログ内の section は一つだけなので下マージンは不要に */
 section {
   margin-bottom: 0;
 }
@@ -352,7 +334,7 @@ h4 {
 }
 h4:first-of-type {
   margin-top: 0;
-} /* 各ダイアログの最初のh4の上マージンをなくす */
+}
 p,
 li {
   margin-bottom: 1em;
@@ -373,7 +355,6 @@ ul > li {
   margin-bottom: 0.8em;
 }
 
-/* --- スクロールバーのスタイル（変更なし・共通部分） --- */
 .content-body::-webkit-scrollbar {
   width: 8px;
 }
